@@ -1,8 +1,8 @@
 # Wedding invitation
 
-A single-page wedding invitation that mixes two templates: the silver envelope and photobooth from one, and the theatre curtain, scratch-to-reveal date, menu frame and dress code from the other.
+A single-page wedding invitation in emerald and gold that mixes two templates: the envelope and photobooth from one, and the scratch-to-reveal date, menu frame and dress code from the other.
 
-**Flow:** tap the envelope to open it → the curtains open on the names → the silver photobooth prints a photo strip → scratch the silver disc to reveal the date (with countdown and add-to-calendar) → venue → programme → dress code → RSVP over WhatsApp.
+**Flow:** tap the envelope to open it → a floral arch blooms around the names → the gold photobooth prints a photo strip → scratch the gold disc to reveal the date (with countdown and add-to-calendar) → venue → programme → dress code → RSVP over WhatsApp.
 
 ## Edit the content
 
@@ -13,10 +13,11 @@ All text, the date, venue, programme and the WhatsApp number for RSVPs are in [`
 
   ```bash
   python tools/personalize_envelope.py --initials "Y&M"
-  python tools/personalize_envelope.py --initials "Y&M" --photo assets/photos/us.jpg   # your photo in the oval instead of the cupid
+  python tools/personalize_envelope.py --initials "Y&M" --photo assets/photos/us.jpg   # your photo in the oval (plain emerald velvet without --photo)
   ```
 
   Needs Python with `opencv-python`, `numpy`, `pillow`, and `ffmpeg` on the PATH.
+- **Colours:** `python tools/recolor.py` rebuilds the emerald velvet, gold photobooth, gold scratch disc and green line art from the originals in `tools/source/`.
 - **Share card + link preview:** after editing `config.js`, rebuild the image you send on WhatsApp (`assets/images/share-card.png`) and the link preview (`assets/images/og-card.jpg`):
 
   ```bash

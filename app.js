@@ -12,7 +12,7 @@
       boothLine: "Three little frames, from us to you",
       print: "Print our photos",
       dateTitle: "Save the date",
-      scratchHint: "Scratch the silver to reveal the date",
+      scratchHint: "Scratch the gold to reveal the date",
       days: "days", hours: "hours", mins: "minutes", secs: "seconds",
       addToCalendar: "Add to calendar",
       venueTitle: "The venue",
@@ -79,7 +79,8 @@
     $("#rsvpBy").textContent = t("rsvpBy").replace("{date}", fmt({ day: "numeric", month: "long" }, deadline));
 
     $(".strip__foot").textContent = new Intl.DateTimeFormat("en-GB", { timeZone: TZ, day: "2-digit", month: "2-digit", year: "numeric" }).format(when).replace(/\//g, ".");
-    $(".strip__shot--mono") && ($(".strip__shot--mono").textContent = `${C.couple.one[0]}&${C.couple.two[0]}`);
+    $$(".strip__shot--mono").forEach((el) => { el.textContent = `${C.couple.one[0]}&${C.couple.two[0]}`; });
+    $("#seal").textContent = `${C.couple.one[0]}&${C.couple.two[0]}`;
     $(".strip__shot--names") && ($(".strip__shot--names").textContent = names());
 
     $("#envelope").setAttribute("aria-label", t("tapToOpen"));
@@ -134,36 +135,22 @@
       document.body.classList.remove("is-sealed");
       window.scrollTo(0, 0);
       env.classList.add("is-gone");
-      raiseCurtain();
+      bloom();
     }, reduced ? 0 : 1000);
   }
   env.addEventListener("click", openEnvelope);
   env.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openEnvelope(); } });
 
-  /* ---------- 2 · curtain ---------- */
+  /* ---------- 2 · floral arch ---------- */
   const stage = $("#stage");
-  const curtain = $(".stage__video");
-  function raiseCurtain() {
-    if (reduced) { stage.classList.add("is-open", "is-spread"); return; }
-    setTimeout(() => {
-      stage.classList.add("is-opening");
-      curtain.play().catch(spread);
-      curtain.addEventListener("ended", spread, { once: true });
-      setTimeout(spread, 7000);
-    }, 500);
-  }
-  let spreadDone = false;
-  function spread() {
-    if (spreadDone) return;
-    spreadDone = true;
-    stage.classList.add("is-open");
-    requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add("is-spread")));
+  function bloom() {
+    requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add("is-bloomed")));
   }
 
   /* ---------- 3 · photobooth ---------- */
   const strip = $("#strip");
   const shots = $$(".strip__shot", strip);
-  const fallback = ["strip__shot--cupid", "strip__shot--mono", "strip__shot--names"];
+  const fallback = ["strip__shot--mono", "strip__shot--names", "strip__shot--mono"];
   shots.forEach((s, i) => {
     const src = (C.photos || [])[i];
     if (src) s.style.backgroundImage = `url("${src}")`;
@@ -182,7 +169,7 @@
   const foil = $("#foil");
   const ctx = foil.getContext("2d", { willReadFrequently: true });
   const disc = new Image();
-  disc.src = "assets/images/scratch-silver.png";
+  disc.src = "assets/images/scratch-gold.png";
   let revealed = false;
 
   function paintFoil() {

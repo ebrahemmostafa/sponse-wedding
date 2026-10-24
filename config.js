@@ -16,9 +16,8 @@ window.INVITE = {
     below: "invite you to celebrate our wedding",
   },
 
-  // up to 3 photos for the photobooth strip, e.g. ["assets/photos/1.jpg", ...]
-  // leave empty to use the illustrated frames
-  photos: [],
+  // up to 3 photos for the photobooth strip (printed in black and white)
+  photos: ["assets/photos/hands.jpg", "assets/photos/toast.jpg", "assets/photos/veil.jpg"],
 
   venue: {
     name: "Four Seasons Nile Plaza",

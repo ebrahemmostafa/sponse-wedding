@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#3b0a12">
+  <meta name="theme-color" content="#0f3b2e">
   <meta name="color-scheme" content="only light">
   <title>Youssef &amp; Malak</title>
   <meta name="description" content="You're invited to our wedding">
   <meta property="og:type" content="website">
   <meta property="og:title" content="You're invited">
   <meta property="og:image" content="assets/images/og-card.jpg">
-  <link rel="icon" href="assets/images/cupid.png">
+  <link rel="icon" href="assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cormorant+SC:wght@400;500&family=Great+Vibes&display=swap">
@@ -34,13 +34,18 @@
 
   <main class="suite">
 
-    <!-- 2 · the curtain rises -->
+    <!-- 2 · floral arch -->
     <section class="stage" id="stage" aria-label="Invitation">
-      <div class="stage__curtain">
-        <img class="stage__closed" src="assets/images/curtain-closed.jpg" alt="">
-        <video class="stage__video" src="assets/video/curtain.mp4" muted playsinline preload="auto"></video>
-        <div class="stage__half stage__half--l"><img src="assets/images/curtain-open.jpg" alt=""></div>
-        <div class="stage__half stage__half--r"><img src="assets/images/curtain-open.jpg" alt=""></div>
+      <img class="stage__arch" src="assets/images/floral-arch.jpg" alt="">
+      <div class="petals" aria-hidden="true">
+        <i style="left:12%;--d:10s;--w:.2s;--x:40px"></i>
+        <i style="left:26%;--d:12s;--w:1.6s;--x:-30px"></i>
+        <i style="left:41%;--d:9.5s;--w:.9s;--x:26px"></i>
+        <i style="left:58%;--d:11s;--w:2.4s;--x:-44px"></i>
+        <i style="left:71%;--d:10.5s;--w:.5s;--x:30px"></i>
+        <i style="left:86%;--d:12.5s;--w:1.9s;--x:-24px"></i>
+        <i style="left:34%;--d:13s;--w:3.4s;--x:50px"></i>
+        <i style="left:79%;--d:11.5s;--w:3s;--x:-36px"></i>
       </div>
       <div class="stage__text">
         <p class="stage__above" data-t="hero.above"></p>
@@ -83,7 +88,7 @@
           <span class="scratch__month" id="dMonth"></span>
           <span class="scratch__year" id="dYear"></span>
         </div>
-        <canvas class="scratch__foil" id="foil" aria-label="Scratch to reveal the date" role="img"></canvas>
+        <canvas class="scratch__foil" id="foil" aria-label="Scratch the gold to reveal the date" role="img"></canvas>
       </div>
       <p class="hint" id="scratchHint" data-t="scratchHint"></p>
 
@@ -163,7 +168,7 @@
 
     <!-- 9 · closing -->
     <section class="closing">
-      <span class="closing__cupid" aria-hidden="true"></span>
+      <span class="closing__seal" id="seal" aria-hidden="true"></span>
       <p class="closing__line" data-t="closing"></p>
       <p class="names names--small">
         <span data-t="couple.one"></span>

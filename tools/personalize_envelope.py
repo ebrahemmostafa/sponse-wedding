@@ -1,22 +1,24 @@
 """Rebuild the envelope still + opening video with your own medallion.
 
-  python personalize_envelope.py --initials "Y&M"                 # velvet + silver cupid in the oval
   python personalize_envelope.py --initials "Y&M" --photo us.jpg  # your photo (black & white) in the oval
+  python personalize_envelope.py --initials "Y&M"                 # plain emerald velvet in the oval
 
 Needs envelope_ellipses.json (from track_envelope.py + refine_envelope.py).
 Writes ../assets/images/envelope.jpg and ../assets/video/envelope-open.mp4
 """
-import argparse, json, os, subprocess
+import argparse, json, os, subprocess, sys
 import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from recolor import metal_to_gold  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, ".."))
 SRC = os.path.join(HERE, "source", "envelope-open-original.mp4")
 STILL = os.path.join(HERE, "source", "envelope-original.jpg")
 VELVET = os.path.join(ROOT, "assets", "images", "velvet.webp")
-CUPID = os.path.join(ROOT, "assets", "images", "cupid.png")
 SCRIPT_FONT = os.path.join(HERE, "fonts", "GreatVibes-Regular.ttf")
 
 # engraving block relative to the oval, measured on the still
@@ -67,22 +69,7 @@ def oval_content(photo, w=600, h=900):
     yy, xx = np.mgrid[0:h, 0:w]
     r = np.sqrt(((xx - w * 0.45) / w) ** 2 + ((yy - h * 0.4) / h) ** 2)
     vel *= (1.25 - 0.9 * r)[..., None]
-    # silver cupid
-    cup = Image.open(CUPID).convert("RGBA")
-    cw = int(w * 0.86)
-    cup = cup.resize((cw, cw), Image.LANCZOS)
-    a = np.array(cup)[..., 3].astype(np.float32) / 255.0
-    canvas = np.zeros((h, w), np.float32)
-    ox, oy = (w - cw) // 2 + int(w * 0.02), (h - cw) // 2 - int(h * 0.02)
-    canvas[oy:oy + cw, ox:ox + cw] = a
-    blur = cv2.GaussianBlur(canvas, (0, 0), 1.2)
-    shade = np.clip(np.roll(blur, (-2, -2), (0, 1)) - np.roll(blur, (2, 2), (0, 1)), -1, 1)
-    silver = np.array([178, 190, 198], np.float32)  # BGR antique silver
-    out = vel * (1 - canvas[..., None]) + silver * canvas[..., None]
-    out += (shade[..., None] * 70)
-    drop = np.clip(np.roll(blur, (4, 4), (0, 1)) - blur, 0, 1)
-    out *= (1 - 0.5 * drop[..., None])
-    return np.clip(out, 0, 255).astype(np.uint8)
+    return np.clip(vel, 0, 255).astype(np.uint8)
 
 
 def paste_oval(frame, e, content, gain):
@@ -217,6 +204,17 @@ def paper_grain(e, e0, w, h):
     return np.tile(tex, reps)[:h, :w]
 
 
+def gild(frame, strength):
+    """Tint the silver envelope towards antique gold (BGR in, BGR out)."""
+    if strength <= 0:
+        return frame
+    rgb = frame[..., ::-1].astype(np.float32)
+    g = metal_to_gold(rgb, strength)
+    # keep it a soft champagne, not brass: lift the shadows back towards the paper
+    g = g * 0.85 + rgb * 0.15 + 6
+    return np.clip(g[..., ::-1], 0, 255).astype(np.uint8)
+
+
 def paper_level(frame, e):
     cx, cy, a, b, _ = e
     x0, x1 = int(cx + a * 1.15), int(cx + a * 1.5)
@@ -233,6 +231,7 @@ def main():
     ap.add_argument("--initials", default="Y&M")
     ap.add_argument("--photo", default=None)
     ap.add_argument("--still-only", action="store_true")
+    ap.add_argument("--gold", type=float, default=0.62, help="how strongly the silver paper turns gold (0 keeps silver)")
     args = ap.parse_args()
 
     ells, still_e = load_ellipses()
@@ -241,6 +240,7 @@ def main():
     # still
     st = cv2.imread(STILL)
     sref = engrave_ref(st, still_e)
+    st = gild(st, args.gold)
     paste_oval(st, still_e, content, 1.0)
     engrave(st, still_e, sref, args.initials)
     os.makedirs(os.path.join(ROOT, "assets", "images"), exist_ok=True)
@@ -267,6 +267,7 @@ def main():
         if base is None:
             base = lvl
             vref = engrave_ref(f, e)
+        f = gild(f, args.gold)
         gain = (lvl / base) if (lvl and base) else 1.0
         paste_oval(f, e, content, min(1.25, max(0.8, gain)))
         engrave(f, e, vref, args.initials)
