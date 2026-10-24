@@ -2,7 +2,7 @@
 
 A single-page wedding invitation in emerald and gold that mixes two templates: the envelope and photobooth from one, and the scratch-to-reveal date, menu frame and dress code from the other.
 
-**Flow:** tap the envelope to open it → a floral arch blooms around the names → the gold photobooth prints a photo strip → scratch the gold disc to reveal the date (with countdown and add-to-calendar) → venue → programme → dress code → RSVP over WhatsApp.
+**Flow:** tap the envelope to open it → a background video of the couple walking hand in hand reveals the names → the gold photobooth prints a photo strip → scratch the gold disc to reveal the date (with countdown and add-to-calendar) → venue → programme → dress code → RSVP over WhatsApp.
 
 ## Edit the content
 

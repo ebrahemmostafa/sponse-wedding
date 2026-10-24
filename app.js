@@ -141,9 +141,11 @@
   env.addEventListener("click", openEnvelope);
   env.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openEnvelope(); } });
 
-  /* ---------- 2 · floral arch ---------- */
+  /* ---------- 2 · the couple walking ---------- */
   const stage = $("#stage");
+  const walk = $(".stage__video");
   function bloom() {
+    if (!reduced) walk.play().catch(() => {}); // reduced motion keeps the still poster
     requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.add("is-bloomed")));
   }
 
